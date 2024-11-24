@@ -16,7 +16,6 @@
   sudo service mongod start  # Linux/macOS
 
 
-Explique como rodar o projeto:
 ## Como rodar o projeto
 1. Clone este repositório:
    ```bash
