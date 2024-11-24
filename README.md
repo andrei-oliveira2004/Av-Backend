@@ -15,8 +15,9 @@ Explique como rodar o projeto:
    ```bash
    git clone https://github.com/seu-usuario/seu-projeto.git
 2. Instale as dependências:
-npm install
+      ```bash
+     npm install
 
 3. Inicie o projeto:
    ```bash
-npm start
+     npm start
