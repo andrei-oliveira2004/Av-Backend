@@ -13,8 +13,10 @@
    ```bash
    git clone https://github.com/seu-usuario/seu-projeto.git
 
-2. Instale as dependências:
+##2. Instale as dependências:
+ ```bash
 npm install
 
-3. Inicie o projeto:
+##3. Instale as dependências:
+ ```bash
 npm start
