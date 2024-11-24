@@ -12,3 +12,9 @@
 1. Clone este repositório:
    ```bash
    git clone https://github.com/seu-usuario/seu-projeto.git
+
+2. Instale as dependências:
+npm install
+
+3. Inicie o projeto:
+npm start
