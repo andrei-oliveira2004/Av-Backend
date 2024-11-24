@@ -17,6 +17,6 @@
  ```bash
 npm install
 
-##3. Instale as dependências:
+##3.Inicie o projeto:
  ```bash
 npm start
