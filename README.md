@@ -1,6 +1,6 @@
    # Tarefas API
-  ###### Aplicação Web para cadastrar e administrar <br> tarefas e usuários
-  ![My Skills](https://skillicons.dev/icons?i=ts,,nodejs,express,mongodb)
+  ###### Aplicação Web para tarefas e usuários
+  ![My Skills](https://skillicons.dev/icons?i=nodejs,express,mongodb)
 
 </div>
 
@@ -33,9 +33,8 @@ Explique como rodar o projeto:
 <details>
   <summary align="center">Sobre o projeto</summary>
   
-  * Interface web com HTML, CSS, JS, TS e REACT.JS
-  * Uma WEB API REST, feita com Node.js e Express.js com Typescript
+  * Uma WEB API REST, feita com Node.js e Express.js com JS
   * Um banco de dados Mongodb para permanencia de dados
-  * Cadastre e administre Sabores de Pizzas e Pedidos
+  * Cadastre e administre Usuários e Tarefas
     
 </details>
