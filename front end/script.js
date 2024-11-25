@@ -17,7 +17,7 @@ const taskTitleInput = document.getElementById('task-title');
 const taskDescriptionInput = document.getElementById('task-description');
 const taskDateInput = document.getElementById('task-date');
 
-// Função para listar Usuários
+
 const listarUsuarios = async () => {
     try {
         const response = await fetch(userApiUrl);
