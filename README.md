@@ -33,7 +33,7 @@
   <summary align="center">Sobre o projeto</summary>
   
   * Uma WEB API REST, feita com Node.js e Express.js com JS
-  * Um banco de dados Mongodb para permanencia de dados
+  * Um banco de dados Mongodb
   * Cadastre e administre Usuários e Tarefas
     
 </details>
