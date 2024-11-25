@@ -25,7 +25,7 @@ const listarUsuarios = async () => {
         userList.innerHTML = '';
         usuarios.forEach(user => {
             const li = document.createElement('li');
-            li.innerHTML = `${user.nome} (${user.email})
+            li.innerHTML = `${user.nome} ${user.email} (${user.senha})
                 <button class="edit-btn" onclick="editarUsuario('${user._id}')">Editar</button>
                 <button onclick="deletarUsuario('${user._id}')">Deletar</button>`;
             userList.appendChild(li);
@@ -35,7 +35,6 @@ const listarUsuarios = async () => {
     }
 };
 
-// Função para salvar/atualizar Usuário
 userForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
@@ -62,7 +61,7 @@ userForm.addEventListener('submit', async (event) => {
     }
 });
 
-// Função para editar usuário
+
 const editarUsuario = async (id) => {
     try {
         const response = await fetch(`${userApiUrl}/${id}`);
@@ -75,7 +74,7 @@ const editarUsuario = async (id) => {
     }
 };
 
-// Função para deletar usuário
+
 const deletarUsuario = async (id) => {
     if (confirm('Tem certeza que deseja deletar este usuário?')) {
         try {
@@ -87,7 +86,7 @@ const deletarUsuario = async (id) => {
     }
 };
 
-// Função para listar Tarefas
+
 const listarTarefas = async () => {
     try {
         const response = await fetch(taskApiUrl);
@@ -105,7 +104,7 @@ const listarTarefas = async () => {
     }
 };
 
-// Função para salvar/atualizar Tarefa
+
 taskForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
@@ -134,7 +133,7 @@ taskForm.addEventListener('submit', async (event) => {
     }
 });
 
-// Função para editar tarefa
+
 const editarTarefa = async (id) => {
     try {
         const response = await fetch(`${taskApiUrl}/${id}`);
@@ -148,7 +147,7 @@ const editarTarefa = async (id) => {
     }
 };
 
-// Função para deletar tarefa
+
 const deletarTarefa = async (id) => {
     if (confirm('Tem certeza que deseja deletar esta tarefa?')) {
         try {
@@ -160,6 +159,6 @@ const deletarTarefa = async (id) => {
     }
 };
 
-// Inicializa a listagem
+
 listarUsuarios();
 listarTarefas();
