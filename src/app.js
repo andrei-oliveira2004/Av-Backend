@@ -1,14 +1,13 @@
-
 const express = require('express');
 const mongoose = require('mongoose');
-
+const routes = require('./routes/tarefasRoutes');  
+const userRoutes = require('./routes/Usuariosroutes');  
 
 const app = express();
 
+app.use(express.json());  
 
-app.use(express.json());
-
-
+// Conexão com o MongoDB
 mongoose.connect('mongodb://localhost:27017/', {
 })
   .then(() => {
@@ -16,13 +15,14 @@ mongoose.connect('mongodb://localhost:27017/', {
   })
   .catch((error) => {
     console.error('Erro ao conectar ao MongoDB:', error);
-    process.exit(1); 
+    process.exit(1);  
   });
 
 
-app.get('/', (req, res) => {
-  res.send('API Backend com Express e MongoDB');
-});
+app.use('/api', routes);
+
+
+app.use('/api', userRoutes); 
 
 
 const PORT = process.env.PORT || 3000;

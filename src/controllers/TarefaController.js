@@ -42,4 +42,5 @@ const deletarTarefa = async (req, res) => {
   }
 };
 
-module.exports = { criarTarefa, obterTarefas, atualizarTarefa, deletarTarefa };
+module.exports = { criarTarefa, listarTarefas, atualizarTarefa, deletarTarefa };
+

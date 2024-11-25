@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const tarefaController = require("../controllers/tarefaController");
+const tarefaController = require("../controllers/TarefaController");
 
 router.post("/tarefas", tarefaController.criarTarefa);
 router.get("/tarefas", tarefaController.listarTarefas);

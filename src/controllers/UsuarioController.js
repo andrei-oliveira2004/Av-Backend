@@ -42,4 +42,4 @@ const deletarUsuario = async (req, res) => {
   }
 };
 
-module.exports = { criarUsuario, obterUsuarios, atualizarUsuario, deletarUsuario };
+module.exports = { criarUsuario, listarUsuarios, atualizarUsuario, deletarUsuario };

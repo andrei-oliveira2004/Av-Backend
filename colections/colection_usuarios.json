@@ -1,0 +1,82 @@
+{
+  "info": {
+    "name": "Usuarios Collection",
+    "_postman_id": "unique-id-usuarios",
+    "description": "Coleção de exemplos para gerenciar usuários.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Criar Usuário",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Novo Usuário\",\n  \"email\": \"usuario@email.com\",\n  \"senha\": \"123456\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/usuarios",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "usuarios"]
+        }
+      }
+    },
+    {
+      "name": "Listar Usuários",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:3000/api/usuarios",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "usuarios"]
+        }
+      }
+    },
+    {
+      "name": "Atualizar Usuário",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Usuário Atualizado\",\n  \"email\": \"novoemail@email.com\",\n  \"senha\": \"novaSenha123\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/usuarios/ID_DO_USUARIO",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "usuarios", ":id"]
+        }
+      }
+    },
+    {
+      "name": "Deletar Usuário",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "http://localhost:3000/api/usuarios/ID_DO_USUARIO",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "usuarios", ":id"]
+        }
+      }
+    }
+  ]
+}
