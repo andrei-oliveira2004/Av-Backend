@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestão de Usuários e Tarefas</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="container">
         <header>
@@ -20,7 +22,7 @@
                     <input type="hidden" id="user-id">
                     <input type="text" id="user-name" placeholder="Nome" required>
                     <input type="email" id="user-email" placeholder="Email" required>
-                    <input type="senha" id="user-senha" placeholder="Senha" required>
+                    <input type="password" id="senha" placeholder="Senha" required>
                     <button type="submit">Salvar Usuário</button>
                 </form>
 
@@ -34,7 +36,7 @@
                     <input type="hidden" id="task-id">
                     <input type="text" id="task-title" placeholder="Título da Tarefa" required>
                     <textarea id="task-description" placeholder="Descrição da Tarefa" required></textarea>
-                    <input type="date" id="task-date" required>
+                    <input type="date" id="task-date">
                     <button type="submit">Salvar Tarefa</button>
                 </form>
 
@@ -46,8 +48,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>
-
-
-
-
