@@ -11,7 +11,7 @@ const tarefaSchema = new mongoose.Schema({
   },
   dataConclusao: {
     type: Date,
-    required: true
+    required: false
   }
 });
 
