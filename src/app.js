@@ -2,10 +2,12 @@ const express = require('express');
 const mongoose = require('mongoose');
 const routes = require('./routes/tarefasRoutes');  
 const userRoutes = require('./routes/Usuariosroutes');  
+const cors = require ('cors')
 
 const app = express();
 
 app.use(express.json());  
+app.use(cors());
 
 // Conexão com o MongoDB
 mongoose.connect('mongodb://localhost:27017/', {
