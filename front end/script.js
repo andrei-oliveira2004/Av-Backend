@@ -38,29 +38,36 @@ const listarUsuarios = async () => {
 userForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
-    const nome = userNameInput.value;
-    const email = userEmailInput.value;
+    const nome = userNameInput.value.trim();
+    const email = userEmailInput.value.trim();
+    const senha = userSenhaInput.value.trim();
 
     if (!nome || !email) {
         alert('Nome e email são obrigatórios!');
         return;
     }
 
-    const userData = { nome, email };
+    const userData = { nome, email, senha };
 
     try {
         const method = userIdInput.value ? 'PUT' : 'POST';
         const url = userIdInput.value ? `${userApiUrl}/${userIdInput.value}` : userApiUrl;
 
-        await fetch(url, {
+        const response = await fetch(url, {
             method: method,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(userData),
         });
 
+        if (!response.ok) {
+            alert('Erro ao salvar usuário!');
+            return;
+        }
+
         // Limpar os campos após salvar
         userNameInput.value = '';
         userEmailInput.value = '';
+        userSenhaInput.value = '';
         userIdInput.value = ''; // Limpar o campo de ID após salvar
 
         // Recarregar a lista de usuários
@@ -68,7 +75,6 @@ userForm.addEventListener('submit', async (event) => {
         alert('Usuário salvo com sucesso!');
     } catch (error) {
         console.error('Erro ao salvar usuário:', error);
-        alert('Erro ao salvar usuário!');
     }
 });
 
@@ -76,6 +82,10 @@ userForm.addEventListener('submit', async (event) => {
 const editarUsuario = async (id) => {
     try {
         const response = await fetch(`${userApiUrl}/${id}`);
+        if (!response.ok) {
+            alert('Erro ao buscar usuário para edição!');
+            return;
+        }
         const user = await response.json();
 
         // Preencher os campos com os dados do usuário
@@ -96,7 +106,6 @@ const deletarUsuario = async (id) => {
             alert('Usuário deletado com sucesso!');
         } catch (error) {
             console.error('Erro ao deletar usuário:', error);
-            alert('Erro ao deletar usuário!');
         }
     }
 };
@@ -109,7 +118,7 @@ const listarTarefas = async () => {
         taskList.innerHTML = '';
         tarefas.forEach(task => {
             const li = document.createElement('li');
-            li.innerHTML = `${task.titulo} - ${task.dataConclusao}
+            li.innerHTML = `${task.titulo} - ${task.dataConclusao || "Pendente"}
                 <button class="edit-btn" onclick="editarTarefa('${task._id}')">Editar</button>
                 <button onclick="deletarTarefa('${task._id}')">Deletar</button>`;
             taskList.appendChild(li);
@@ -123,12 +132,12 @@ const listarTarefas = async () => {
 taskForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
-    const titulo = taskTitleInput.value;
-    const descricao = taskDescriptionInput.value;
-    const dataConclusao = taskDateInput.value;
+    const titulo = taskTitleInput.value.trim();
+    const descricao = taskDescriptionInput.value.trim();
+    const dataConclusao = taskDateInput.value.trim();
 
-    if (!titulo || !descricao || !dataConclusao) {
-        alert('Título, descrição e data de conclusão são obrigatórios!');
+    if (!titulo || !descricao) {
+        alert('Título e descrição são obrigatórios!');
         return;
     }
 
@@ -138,11 +147,16 @@ taskForm.addEventListener('submit', async (event) => {
         const method = taskIdInput.value ? 'PUT' : 'POST';
         const url = taskIdInput.value ? `${taskApiUrl}/${taskIdInput.value}` : taskApiUrl;
 
-        await fetch(url, {
+        const response = await fetch(url, {
             method: method,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(taskData),
         });
+
+        if (!response.ok) {
+            alert('Erro ao salvar tarefa!');
+            return;
+        }
 
         // Limpar os campos após salvar
         taskTitleInput.value = '';
@@ -150,12 +164,11 @@ taskForm.addEventListener('submit', async (event) => {
         taskDateInput.value = '';
         taskIdInput.value = ''; // Limpar o campo de ID após salvar
 
-        // Recarregar a lista de tarefas
+        // Atualizar a lista de tarefas
         await listarTarefas();
         alert('Tarefa salva com sucesso!');
     } catch (error) {
         console.error('Erro ao salvar tarefa:', error);
-        alert('Erro ao salvar tarefa!');
     }
 });
 
@@ -163,15 +176,21 @@ taskForm.addEventListener('submit', async (event) => {
 const editarTarefa = async (id) => {
     try {
         const response = await fetch(`${taskApiUrl}/${id}`);
-        const task = await response.json();
+        const tarefa = await response.json();
 
         // Preencher os campos com os dados da tarefa
-        taskTitleInput.value = task.titulo;
-        taskDescriptionInput.value = task.descricao;
-        taskDateInput.value = task.dataConclusao;
-        taskIdInput.value = task._id; // Preencher o campo de ID com o ID da tarefa
+        taskTitleInput.value = tarefa.titulo;
+        taskDescriptionInput.value = tarefa.descricao;
+
+        // Formatar a data para o formato YYYY-MM-DD
+        const dataISO = new Date(tarefa.dataConclusao);
+        const dataFormatada = dataISO.toISOString().split('T')[0]; // "2024-11-25"
+        taskDateInput.value = dataFormatada;
+
+        taskIdInput.value = tarefa._id; // Preencher o campo de ID com o ID da tarefa
     } catch (error) {
-        console.error('Erro ao editar tarefa:', error);
+        console.error("Erro ao editar tarefa:", error);
+        alert("Erro ao carregar os dados da tarefa.");
     }
 };
 
@@ -184,7 +203,6 @@ const deletarTarefa = async (id) => {
             alert('Tarefa deletada com sucesso!');
         } catch (error) {
             console.error('Erro ao deletar tarefa:', error);
-            alert('Erro ao deletar tarefa!');
         }
     }
 };

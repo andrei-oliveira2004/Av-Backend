@@ -31,6 +31,17 @@ const atualizarTarefa = async (req, res) => {
   }
 };
 
+const obterTarefaPorId = async (req, res) => {
+  try {
+    const tarefa = await Tarefa.findById(req.params.id);
+    if (!tarefa) {
+      return res.status(404).json({ message: "Tarefa não encontrada" });
+    }
+    res.json(tarefa);
+  } catch (error) {
+    res.status(500).json({ message: "Erro ao obter tarefa", error });
+  }
+};
 
 const deletarTarefa = async (req, res) => {
   try {
@@ -42,5 +53,4 @@ const deletarTarefa = async (req, res) => {
   }
 };
 
-module.exports = { criarTarefa, listarTarefas, atualizarTarefa, deletarTarefa };
-
+module.exports = { criarTarefa, listarTarefas, atualizarTarefa, deletarTarefa, obterTarefaPorId };
