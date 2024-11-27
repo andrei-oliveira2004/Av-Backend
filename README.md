@@ -26,7 +26,7 @@
 
 3. Inicie o projeto:
    ```bash
-     npm start
+     npm run start
 
 
 <details>
