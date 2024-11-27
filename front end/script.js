@@ -7,6 +7,7 @@ const userList = document.getElementById('user-list');
 const userIdInput = document.getElementById('user-id');
 const userNameInput = document.getElementById('user-name');
 const userEmailInput = document.getElementById('user-email');
+const userSenhaInput = document.getElementById('user-senha');
 
 // Seletores de Tarefas
 const taskForm = document.getElementById('task-form');
@@ -42,12 +43,12 @@ userForm.addEventListener('submit', async (event) => {
     const email = userEmailInput.value.trim();
     const senha = userSenhaInput.value.trim();
 
-    if (!nome || !email) {
-        alert('Nome e email são obrigatórios!');
+    if (!nome || !email || !senha) {
+        alert('Nome, email, senha  são obrigatórios!');
         return;
     }
 
-    const userData = { nome, email, senha };
+    const userData = { nome, email,senha };
 
     try {
         const method = userIdInput.value ? 'PUT' : 'POST';
@@ -63,7 +64,6 @@ userForm.addEventListener('submit', async (event) => {
             alert('Erro ao salvar usuário!');
             return;
         }
-
         // Limpar os campos após salvar
         userNameInput.value = '';
         userEmailInput.value = '';
@@ -91,22 +91,11 @@ const editarUsuario = async (id) => {
         // Preencher os campos com os dados do usuário
         userNameInput.value = user.nome;
         userEmailInput.value = user.email;
-        userIdInput.value = user._id; // Preencher o campo de ID com o ID do usuário
+        userSenhaInput.value = user.senha;
+
+        userIdInput.value = user._id;
     } catch (error) {
         console.error('Erro ao editar usuário:', error);
-    }
-};
-
-// Função para deletar usuário
-const deletarUsuario = async (id) => {
-    if (confirm('Tem certeza que deseja deletar este usuário?')) {
-        try {
-            await fetch(`${userApiUrl}/${id}`, { method: 'DELETE' });
-            await listarUsuarios(); // Atualizar a lista após deletar
-            alert('Usuário deletado com sucesso!');
-        } catch (error) {
-            console.error('Erro ao deletar usuário:', error);
-        }
     }
 };
 

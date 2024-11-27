@@ -21,7 +21,7 @@ const listarUsuarios = async (req, res) => {
 };
 
 
-const atualizarUsuario = async (req, res) => {
+const editarUsuario = async (req, res) => {
   try {
     const usuario = await Usuario.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!usuario) return res.status(404).json({ message: "Usuário não encontrado" });
@@ -31,7 +31,17 @@ const atualizarUsuario = async (req, res) => {
   }
 };
 
-
+const obterUsuarioPorId = async (req, res) => {
+  try {
+    const usuario= await Usuario.findById(req.params.id);
+    if (!usuario) {
+      return res.status(404).json({ message: "Tarefa não encontrada" });
+    }
+    res.json(usuario);
+  } catch (error) {
+    res.status(500).json({ message: "Erro ao obter usuário", error });
+  }
+};
 const deletarUsuario = async (req, res) => {
   try {
     const usuario = await Usuario.findByIdAndDelete(req.params.id);
@@ -42,4 +52,4 @@ const deletarUsuario = async (req, res) => {
   }
 };
 
-module.exports = { criarUsuario, listarUsuarios, atualizarUsuario, deletarUsuario };
+module.exports = { criarUsuario, listarUsuarios, editarUsuario,obterUsuarioPorId, deletarUsuario };
