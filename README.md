@@ -19,7 +19,7 @@
 ## Como rodar o projeto
 1. Clone este repositório:
    ```bash
-   git clone https://github.com/seu-usuario/seu-projeto.git
+   git clone https://github.com/andrei-oliveira2004/Av-Backend
 2. Instale as dependências:
       ```bash
      npm install
