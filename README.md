@@ -17,7 +17,7 @@
 
 
 ## Como rodar o projeto
-1. Clone este repositório:
+1. Abra o terminal do VsCode e clone este repositório:
    ```bash
    git clone https://github.com/andrei-oliveira2004/Av-Backend
 2. Instale as dependências:
@@ -29,8 +29,6 @@
      npm run start
 
 4. Inicie o Frontend
-    ```bash
-
 
 <details>
   <summary align="center">Sobre o projeto</summary>
