@@ -35,6 +35,6 @@
   
   * Uma WEB API REST, feita com Node.js e Express.js com JS
   * Um banco de dados Mongodb
-  * Cadastre e administre Usuários e Tarefas
+  * Cadastre e administre Tarefas
     
 </details>
