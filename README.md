@@ -26,7 +26,10 @@
 
 3. Inicie o projeto:
    ```bash
-     npm start
+     npm run start
+
+4. Inicie o Frontend
+    ```bash
 
 
 <details>

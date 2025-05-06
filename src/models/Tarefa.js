@@ -3,15 +3,19 @@ const mongoose = require("mongoose");
 const tarefaSchema = new mongoose.Schema({
   titulo: {
     type: String,
-    required: true
+    required: [true, "O título é obrigatório"],
+    trim: true
   },
   descricao: {
     type: String,
-    required: true
+    required: [true, "A descrição é obrigatória"],
+    trim: true
   },
-  dataConclusao: {
-    type: Date,
-    required: false
+  status: {
+    type: String,
+    enum: ["Pendente", "Em andamento", "Concluída"],
+    default: "Pendente",
+    required: true
   }
 });
 

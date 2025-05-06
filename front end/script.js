@@ -1,201 +1,183 @@
-const userApiUrl = 'http://localhost:3000/api/usuarios';
-const taskApiUrl = 'http://localhost:3000/api/tarefas';
+const apiUrl = "http://localhost:3000/api/tarefas";
+let tarefas = [];
 
-// Seletores de Usuários
-const userForm = document.getElementById('user-form');
-const userList = document.getElementById('user-list');
-const userIdInput = document.getElementById('user-id');
-const userNameInput = document.getElementById('user-name');
-const userEmailInput = document.getElementById('user-email');
-const userSenhaInput = document.getElementById('user-senha');
+function listarTarefas() {
+  fetch(apiUrl)
+    .then(response => response.json())
+    .then(data => {
+      tarefas = data;
+      renderizarTarefas();
+    })
+    .catch(error => console.error("Erro ao listar tarefas:", error));
+}
 
-// Seletores de Tarefas
-const taskForm = document.getElementById('task-form');
-const taskList = document.getElementById('task-list');
-const taskIdInput = document.getElementById('task-id');
-const taskTitleInput = document.getElementById('task-title');
-const taskDescriptionInput = document.getElementById('task-description');
-const taskDateInput = document.getElementById('task-date');
+function adicionarTarefa() {
+  const titulo = document.getElementById('task-title').value;
+  const descricao = document.getElementById('task-description').value;
+  const status = document.getElementById('task-status').value;
 
-// Função para listar usuários
-const listarUsuarios = async () => {
-    try {
-        const response = await fetch(userApiUrl);
-        const usuarios = await response.json();
-        userList.innerHTML = '';
-        usuarios.forEach(user => {
-            const li = document.createElement('li');
-            li.innerHTML = `${user.nome} - ${user.email}
-                <button class="edit-btn" onclick="editarUsuario('${user._id}')">Editar</button>
-                <button onclick="deletarUsuario('${user._id}')">Deletar</button>`;
-            userList.appendChild(li);
-        });
-    } catch (error) {
-        console.error('Erro ao listar usuários:', error);
-    }
-};
+  fetch(apiUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ titulo, descricao, status })
+  })
+  .then(() => {
+    listarTarefas();
+    document.getElementById('task-title').value = '';
+    document.getElementById('task-description').value = '';
+  })
+  .catch(error => console.error("Erro ao adicionar tarefa:", error));
+}
 
-// Função para salvar usuário
-userForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
+function deletarTarefa(id) {
+  fetch(`${apiUrl}/${id}`, { method: "DELETE" })
+    .then(() => listarTarefas())
+    .catch(error => console.error("Erro ao deletar tarefa:", error));
+}
 
-    const nome = userNameInput.value.trim();
-    const email = userEmailInput.value.trim();
-    const senha = userSenhaInput.value.trim();
+function editarTarefa(id) {
+  const tarefa = tarefas.find(t => t._id === id);
+  if (!tarefa) return;
 
-    if (!nome || !email || !senha) {
-        alert('Nome, email, senha  são obrigatórios!');
-        return;
-    }
+  // Preenche os campos do formulário com os dados da tarefa
+  document.getElementById('task-title').value = tarefa.titulo;
+  document.getElementById('task-description').value = tarefa.descricao;
+  document.getElementById('task-status').value = tarefa.status;
 
-    const userData = { nome, email,senha };
+  // Adiciona o ID da tarefa ao atributo data-id
+  document.getElementById('task-title').setAttribute("data-id", id);
 
-    try {
-        const method = userIdInput.value ? 'PUT' : 'POST';
-        const url = userIdInput.value ? `${userApiUrl}/${userIdInput.value}` : userApiUrl;
+  // Exibe o botão "Salvar Edição" e oculta o botão "Adicionar Tarefa"
+  document.querySelector('button[onclick="adicionarTarefa()"]').style.display = 'none';
+  document.getElementById('confirm-button').style.display = 'inline-block';
+}
 
-        const response = await fetch(url, {
-            method: method,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(userData),
-        });
+function salvarEdicao() {
+  const id = document.getElementById('task-title').getAttribute("data-id");
+  if (!id) return;
 
-        if (!response.ok) {
-            alert('Erro ao salvar usuário!');
-            return;
-        }
-        // Limpar os campos após salvar
-        userNameInput.value = '';
-        userEmailInput.value = '';
-        userSenhaInput.value = '';
-        userIdInput.value = ''; // Limpar o campo de ID após salvar
+  // Atualiza a tarefa no backend
+  fetch(`${apiUrl}/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      titulo: document.getElementById('task-title').value,
+      descricao: document.getElementById('task-description').value,
+      status: document.getElementById('task-status').value
+    })
+  })
+  .then(() => {
+    listarTarefas();
 
-        // Recarregar a lista de usuários
-        await listarUsuarios();
-        alert('Usuário salvo com sucesso!');
-    } catch (error) {
-        console.error('Erro ao salvar usuário:', error);
-    }
-});
+    // Limpa os campos do formulário
+    document.getElementById('task-title').value = '';
+    document.getElementById('task-description').value = '';
+    document.getElementById('task-status').value = 'Pendente';
 
-// Função para editar usuário
-const editarUsuario = async (id) => {
-    try {
-        const response = await fetch(`${userApiUrl}/${id}`);
-        if (!response.ok) {
-            alert('Erro ao buscar usuário para edição!');
-            return;
-        }
-        const user = await response.json();
+    // Remove o atributo data-id
+    document.getElementById('task-title').removeAttribute("data-id");
 
-        // Preencher os campos com os dados do usuário
-        userNameInput.value = user.nome;
-        userEmailInput.value = user.email;
-        userSenhaInput.value = user.senha;
+    // Exibe o botão "Adicionar Tarefa" e oculta o botão "Salvar Edição"
+    document.querySelector('button[onclick="adicionarTarefa()"]').style.display = 'inline-block';
+    document.getElementById('confirm-button').style.display = 'none';
+  })
+  .catch(error => console.error("Erro ao editar tarefa:", error));
+}
 
-        userIdInput.value = user._id;
-    } catch (error) {
-        console.error('Erro ao editar usuário:', error);
-    }
-};
+function renderizarTarefas() {
+  const taskList = document.getElementById('task-list');
+  taskList.innerHTML = '';
 
-// Função para listar tarefas
-const listarTarefas = async () => {
-    try {
-        const response = await fetch(taskApiUrl);
-        const tarefas = await response.json();
-        taskList.innerHTML = '';
-        tarefas.forEach(task => {
-            const li = document.createElement('li');
-            li.innerHTML = `${task.titulo} - ${task.dataConclusao || "Pendente"}
-                <button class="edit-btn" onclick="editarTarefa('${task._id}')">Editar</button>
-                <button onclick="deletarTarefa('${task._id}')">Deletar</button>`;
-            taskList.appendChild(li);
-        });
-    } catch (error) {
-        console.error('Erro ao listar tarefas:', error);
-    }
-};
+  tarefas.forEach(tarefa => {
+    const li = document.createElement('li');
+    li.style.background = '#fff';
+    li.style.padding = '20px';
+    li.style.borderRadius = '12px';
+    li.style.boxShadow = '0px 2px 10px rgba(0, 0, 0, 0.05)';
+    li.style.display = 'flex';
+    li.style.flexDirection = 'column';
+    li.style.gap = '10px';
+    li.style.position = 'relative';
+    li.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease';
 
-// Função para salvar tarefa
-taskForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
+    li.addEventListener('mouseover', () => {
+      li.style.transform = 'scale(1.02)';
+      li.style.boxShadow = '0px 4px 15px rgba(0, 0, 0, 0.1)';
+    });
 
-    const titulo = taskTitleInput.value.trim();
-    const descricao = taskDescriptionInput.value.trim();
-    const dataConclusao = taskDateInput.value.trim();
+    li.addEventListener('mouseout', () => {
+      li.style.transform = 'scale(1)';
+      li.style.boxShadow = '0px 2px 10px rgba(0, 0, 0, 0.05)';
+    });
 
-    if (!titulo || !descricao) {
-        alert('Título e descrição são obrigatórios!');
-        return;
-    }
+    const title = document.createElement('strong');
+    title.textContent = tarefa.titulo;
+    title.style.fontSize = '18px';
+    title.style.fontWeight = '600';
 
-    const taskData = { titulo, descricao, dataConclusao };
+    const status = document.createElement('span');
+    status.textContent = tarefa.status;
+    status.className = tarefa.status === 'Pendente' ? 'status-pendente' :
+                       tarefa.status === 'Em andamento' ? 'status-em-andamento' :
+                       tarefa.status === 'Concluída' ? 'status-concluido' : '';
+    status.style.padding = '5px 10px';
+    status.style.fontSize = '14px';
+    status.style.borderRadius = '5px';
+    status.style.fontWeight = '600';
+    status.style.marginTop = '10px';
+    status.style.display = 'inline-block';
 
-    try {
-        const method = taskIdInput.value ? 'PUT' : 'POST';
-        const url = taskIdInput.value ? `${taskApiUrl}/${taskIdInput.value}` : taskApiUrl;
+    const description = document.createElement('p');
+    description.textContent = tarefa.descricao;
+    description.style.fontSize = '14px';
+    description.style.color = '#555';
 
-        const response = await fetch(url, {
-            method: method,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(taskData),
-        });
+    const editButton = document.createElement('button');
+    editButton.textContent = 'Editar';
+    editButton.style.background = '#4caf50';
+    editButton.style.color = '#fff';
+    editButton.style.border = 'none';
+    editButton.style.borderRadius = '6px';
+    editButton.style.padding = '8px 12px';
+    editButton.style.cursor = 'pointer';
+    editButton.style.position = 'absolute';
+    editButton.style.top = '10px';
+    editButton.style.right = '100px';
+    editButton.addEventListener('mouseover', () => {
+      editButton.style.background = '#388e3c';
+    });
+    editButton.addEventListener('mouseout', () => {
+      editButton.style.background = '#4caf50';
+    });
+    editButton.onclick = () => editarTarefa(tarefa._id);
 
-        if (!response.ok) {
-            alert('Erro ao salvar tarefa!');
-            return;
-        }
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Deletar';
+    deleteButton.style.background = '#f44336';
+    deleteButton.style.color = '#fff';
+    deleteButton.style.border = 'none';
+    deleteButton.style.borderRadius = '6px';
+    deleteButton.style.padding = '8px 12px';
+    deleteButton.style.cursor = 'pointer';
+    deleteButton.style.position = 'absolute';
+    deleteButton.style.top = '10px';
+    deleteButton.style.right = '10px';
+    deleteButton.addEventListener('mouseover', () => {
+      deleteButton.style.background = '#d32f2f';
+    });
+    deleteButton.addEventListener('mouseout', () => {
+      deleteButton.style.background = '#f44336';
+    });
+    deleteButton.onclick = () => deletarTarefa(tarefa._id);
 
-        // Limpar os campos após salvar
-        taskTitleInput.value = '';
-        taskDescriptionInput.value = '';
-        taskDateInput.value = '';
-        taskIdInput.value = ''; // Limpar o campo de ID após salvar
+    li.appendChild(title);
+    li.appendChild(status);
+    li.appendChild(description);
+    li.appendChild(editButton);
+    li.appendChild(deleteButton);
 
-        // Atualizar a lista de tarefas
-        await listarTarefas();
-        alert('Tarefa salva com sucesso!');
-    } catch (error) {
-        console.error('Erro ao salvar tarefa:', error);
-    }
-});
+    taskList.appendChild(li);
+  });
+}
 
-// Função para editar tarefa
-const editarTarefa = async (id) => {
-    try {
-        const response = await fetch(`${taskApiUrl}/${id}`);
-        const tarefa = await response.json();
-
-        // Preencher os campos com os dados da tarefa
-        taskTitleInput.value = tarefa.titulo;
-        taskDescriptionInput.value = tarefa.descricao;
-
-        // Formatar a data para o formato YYYY-MM-DD
-        const dataISO = new Date(tarefa.dataConclusao);
-        const dataFormatada = dataISO.toISOString().split('T')[0]; // "2024-11-25"
-        taskDateInput.value = dataFormatada;
-
-        taskIdInput.value = tarefa._id; // Preencher o campo de ID com o ID da tarefa
-    } catch (error) {
-        console.error("Erro ao editar tarefa:", error);
-        alert("Erro ao carregar os dados da tarefa.");
-    }
-};
-
-// Função para deletar tarefa
-const deletarTarefa = async (id) => {
-    if (confirm('Tem certeza que deseja deletar esta tarefa?')) {
-        try {
-            await fetch(`${taskApiUrl}/${id}`, { method: 'DELETE' });
-            await listarTarefas(); // Atualizar a lista após deletar
-            alert('Tarefa deletada com sucesso!');
-        } catch (error) {
-            console.error('Erro ao deletar tarefa:', error);
-        }
-    }
-};
-
-// Chama as funções de listagem ao carregar a página
-listarUsuarios();
 listarTarefas();

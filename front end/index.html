@@ -1,52 +1,40 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestão de Usuários e Tarefas</title>
+    <title>Gerenciador de Tarefas</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-    <div class="container">
-        <header>
-            <h1>Tarefas +</h1>
-            <h3>Gerenciador de Tarefas e Usuários</h3>
-        </header>
+    <header>
+        <h1>Gerenciador de Tarefas</h1>
+    </header>
 
-        <div class="content">
-            <div class="section">
-                <h2>Cadastro de Usuário</h2>
-                <form id="user-form">
-                    <input type="hidden" id="user-id">
-                    <input type="text" id="user-name" placeholder="Nome" required>
-                    <input type="email" id="user-email" placeholder="Email" required>
-                    <input type="password" id="user-senha" placeholder="Senha" required>
-                    <button type="submit">Salvar Usuário</button>
-                </form>
-
-                <h3>Lista de Usuários</h3>
-                <ul id="user-list"></ul>
-            </div>
-
-            <div class="section">
-                <h2>Cadastro de Tarefa</h2>
-                <form id="task-form">
-                    <input type="hidden" id="task-id">
-                    <input type="text" id="task-title" placeholder="Título da Tarefa" required>
-                    <textarea id="task-description" placeholder="Descrição da Tarefa" required></textarea>
-                    <input type="date" id="task-date">
-                    <button type="submit">Salvar Tarefa</button>
-                </form>
-
-                <h3>Lista de Tarefas</h3>
-                <ul id="task-list"></ul>
-            </div>
+    <!-- Formulário de Tarefa -->
+    <section id="task-form">
+        <input type="text" id="task-title" placeholder="Título da tarefa" required>
+        <textarea id="task-description" placeholder="Descrição da tarefa"></textarea>
+        <select id="task-status">
+            <option value="Pendente">Pendente</option>
+            <option value="Em andamento">Em andamento</option>
+            <option value="Concluída">Concluída</option>
+        </select>
+        <div class="form-buttons">
+            <button onclick="adicionarTarefa()">Adicionar Tarefa</button>
+            <button id="confirm-button" style="display:none;" onclick="salvarEdicao()">Salvar Edição</button>
         </div>
-    </div>
+    </section>
+
+    <!-- Lista de Tarefas -->
+    <section id="task-list-container">
+        <ul id="task-list"></ul>
+    </section>
+
+    <footer>
+        <p>Gerenciador de Tarefas © 2025</p>
+    </footer>
 
     <script src="script.js"></script>
 </body>
-
 </html>
